@@ -36,12 +36,12 @@ Vagrant.configure("2") do |cluster|
     config.vm.provider :virtualbox do |vb, override|
       # This vagrant box is downloaded from https://vagrantcloud.com/centos/7
       # Other variants https://app.vagrantup.com/boxes/search
-      vb.box = "centos/7"
+      override.vm.box = "centos/7"
 
       cluster.ssh.insert_key = false
       # Don't install your own key (you might not have it)
       # Use this: $HOME/.vagrant.d/insecure_private_key
-      
+
       config.ssh.forward_agent = true
 
       vb.customize [
@@ -52,8 +52,8 @@ Vagrant.configure("2") do |cluster|
       ]
     end
     config.vm.provider :docker do |vb, override|
-      config.ssh.username = "root"
-      config.ssh.password = "root"
+      override.ssh.username = "root"
+      override.ssh.password = "root"
       vb.has_ssh = true
       vb.image = "sickp/centos-sshd:7"
     end
@@ -65,7 +65,7 @@ Vagrant.configure("2") do |cluster|
       node.vm.hostname = "node-#{i}"
       node.vm.network :private_network, ip: "10.42.0.#{i+5}"
       node.vm.provider :virtualbox do |vb, override|
-        vb.box = "centos/7"
+        override.vm.box = "centos/7"
 
         vb.customize [
           "modifyvm", :id,
@@ -75,8 +75,8 @@ Vagrant.configure("2") do |cluster|
         ]
       end
       node.vm.provider :docker do |vb, override|
-        node.ssh.username = "root"
-        node.ssh.password = "root"
+        override.ssh.username = "root"
+        override.ssh.password = "root"
         vb.has_ssh = true
         vb.image = "sickp/centos-sshd:7"
       end
